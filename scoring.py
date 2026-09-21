@@ -9,7 +9,7 @@ and neither function has been checked against bad input.
 2. Move apply_streak_bonus() into scoring_helpers.py and fix the import here.
 3. Find 2-3 "breaker" inputs for session_rating() and decide if they need handling.
 """
-
+import scoring_helpers as sh
 
 def session_rating(combined_score: int) -> str:
     """Rate a study session from its combined minutes+focus score. Correct and tested."""
@@ -23,13 +23,6 @@ def session_rating(combined_score: int) -> str:
         return "Meh"
     return "Skip"
 
-
-def apply_streak_bonus(combined_score: int, streak_days: int) -> int:
-    """Add a bonus for consecutive study days, capped at 100. Works fine -- it's just in the wrong file."""
-    boosted = combined_score + streak_days * 2
-    return min(boosted, 100)
-
-
 def render_session_scorer_tab():
     import streamlit as st
 
@@ -39,7 +32,7 @@ def render_session_scorer_tab():
     streak = st.number_input("Current streak (days)", min_value=0, value=0, step=1)
 
     combined = minutes + focus
-    boosted = apply_streak_bonus(combined, streak)
+    boosted = sh.apply_streak_bonus(combined, streak)
     rating = session_rating(boosted)
     st.metric("Rating", rating, help=f"Combined {combined} -> boosted {boosted}")
 
@@ -48,7 +41,7 @@ def run_demo():
     sessions = [55, 68, 82, 91, 77]
     streak = 3
     for raw in sessions:
-        boosted = apply_streak_bonus(raw, streak)
+        boosted = sh.apply_streak_bonus(raw, streak)
         rating = session_rating(boosted)
         print(f"Raw: {raw} -> Boosted: {boosted} -> Rating: {rating}")
 
