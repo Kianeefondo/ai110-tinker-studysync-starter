@@ -25,7 +25,7 @@ def session_rating(combined_score: int) -> str:
 
 def render_session_scorer_tab():
     import streamlit as st
-
+ 
     st.subheader("Score a Session")
     minutes = st.slider("Minutes studied", 0, 60, 30)
     focus = st.slider("Focus (0-60)", 0, 60, 30)
